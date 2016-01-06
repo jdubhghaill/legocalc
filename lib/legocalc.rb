@@ -3,8 +3,9 @@ require 'chunky_png'
 require_relative "legocalc/brick"
 require_relative "legocalc/result"
 
-image = ChunkyPNG::Image.from_file('test.png')
-puts "width #{image.width} height #{image.height}"
+filename = ARGV[0]
+image = ChunkyPNG::Image.from_file(filename)
+puts "Image width: #{image.width} height: #{image.height}"
 
 bricks = []
 
@@ -76,12 +77,14 @@ end
 
 total = 0
 cost = 0.0
+puts "Bricks count"
 bricks.each do |brick|
   total += brick.width * brick.height * brick.count
   cost += brick.count * brick.cost
   puts "#{brick.description} #{brick.height}x#{brick.width}: #{brick.count}"
 end
 
+puts "pixels count (original cost) = filled count (cost with these bricks)"
 puts "#{image.width * image.height} (#{0.11 * image.width * image.height}) = #{total} (#{cost})"
 
 png = ChunkyPNG::Image.new(image.width * Brick::SIZE, image.height * Brick::SIZE, ChunkyPNG::Color::TRANSPARENT)
@@ -90,4 +93,4 @@ image.height.times do |y|
     results_grid[x][y].draw(png, x, y)
   end
 end
-png.save('instructions.png', :interlace => true)
+png.save("#{filename.sub('.png', '')}_instructions.png", :interlace => true)
