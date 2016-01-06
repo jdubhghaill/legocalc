@@ -90,3 +90,11 @@ bricks.each do |brick|
 end
 
 puts "#{image.width * image.height} (#{0.11 * image.width * image.height}) = #{total} (#{cost})"
+
+png = ChunkyPNG::Image.new(image.width * 5, image.height * 5, ChunkyPNG::Color::TRANSPARENT)
+image.height.times do |y|
+  image.width.times do |x|
+    results_grid[x][y].draw(png, x, y)
+  end
+end
+png.save('instructions.png', :interlace => true)

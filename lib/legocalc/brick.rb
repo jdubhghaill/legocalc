@@ -10,6 +10,68 @@ class Brick
     @count = 0
   end
 
+  def draw (image, x, y, vertical)
+    size = 5
+
+    if !vertical
+      @height.times do |hy|
+        @width.times do |wx|
+          #draw background
+          size.times do |iy|
+            size.times do |ix|
+              image[x * size + wx * size + ix, y * size + hy * size + iy] = @colour
+            end
+          end
+
+          image[x * size + wx * size + size / 2, y * size + hy * size + size / 2] = ChunkyPNG::Color::BLACK
+        end
+      end
+
+      @width.times do |wx|
+        size.times do |ix|
+          image[x * size + wx * size + ix, y * size] = ChunkyPNG::Color::BLACK
+          image[x * size + wx * size + ix, y * size + @height * size - 1] = ChunkyPNG::Color::BLACK
+        end
+      end
+
+      @height.times do |hy|
+        size.times do |iy|
+          image[x * size, y * size + hy * size + iy] = ChunkyPNG::Color::BLACK
+          image[x * size + @width * size - 1, y * size + hy * size + iy] = ChunkyPNG::Color::BLACK
+        end
+      end
+    else
+
+
+      @height.times do |hy|
+        @width.times do |wx|
+          #draw background
+          size.times do |iy|
+            size.times do |ix|
+              image[x * size + hy * size + ix, y * size + wx * size + iy] = @colour
+            end
+          end
+
+          image[x * size + hy * size + size / 2, y * size + wx * size + size / 2] = ChunkyPNG::Color::BLACK
+        end
+      end
+
+      @height.times do |wx|
+        size.times do |ix|
+          image[x * size + wx * size + ix, y * size] = ChunkyPNG::Color::BLACK
+          image[x * size + wx * size + ix, y * size + @width * size - 1] = ChunkyPNG::Color::BLACK
+        end
+      end
+
+      @width.times do |hy|
+        size.times do |iy|
+          image[x * size, y * size + hy * size + iy] = ChunkyPNG::Color::BLACK
+          image[x * size + @height * size - 1, y * size + hy * size + iy] = ChunkyPNG::Color::BLACK
+        end
+      end
+    end
+  end
+
   def fits (image, grid)
     image.height.times do |y|
       image.width.times do |x|
@@ -25,7 +87,7 @@ class Brick
   def add_to_grid (grid, x, y, vertical)
     @count += 1
     grid[x][y].brick = self
-    grid[x][y].vertical = true
+    grid[x][y].vertical = vertical
     @width.times do |ix|
       @height.times do |iy|
         if vertical
