@@ -1,4 +1,6 @@
 class Brick
+  SIZE = 5
+
   attr_accessor :height, :width, :colour, :count, :description, :cost
 
   def initialize (width, height, colour, description, cost)
@@ -11,63 +13,35 @@ class Brick
   end
 
   def draw (image, x, y, vertical)
-    size = 5
+    width = vertical ? @height : @width
+    height = vertical ? @width : @height
 
-    if !vertical
-      @height.times do |hy|
-        @width.times do |wx|
-          #draw background
-          size.times do |iy|
-            size.times do |ix|
-              image[x * size + wx * size + ix, y * size + hy * size + iy] = @colour
-            end
+    height.times do |hy|
+      width.times do |wx|
+        #draw background
+        SIZE.times do |iy|
+          SIZE.times do |ix|
+            image[x * SIZE + wx * SIZE + ix, y * SIZE + hy * SIZE + iy] = @colour
           end
-
-          image[x * size + wx * size + size / 2, y * size + hy * size + size / 2] = ChunkyPNG::Color::BLACK
         end
+
+        #draw dot
+        image[x * SIZE + wx * SIZE + SIZE / 2, y * SIZE + hy * SIZE + SIZE / 2] = ChunkyPNG::Color::BLACK
       end
+    end
 
-      @width.times do |wx|
-        size.times do |ix|
-          image[x * size + wx * size + ix, y * size] = ChunkyPNG::Color::BLACK
-          image[x * size + wx * size + ix, y * size + @height * size - 1] = ChunkyPNG::Color::BLACK
-        end
+    #draw sides
+    width.times do |wx|
+      SIZE.times do |ix|
+        image[x * SIZE + wx * SIZE + ix, y * SIZE] = ChunkyPNG::Color::BLACK
+        image[x * SIZE + wx * SIZE + ix, y * SIZE + height * SIZE - 1] = ChunkyPNG::Color::BLACK
       end
+    end
 
-      @height.times do |hy|
-        size.times do |iy|
-          image[x * size, y * size + hy * size + iy] = ChunkyPNG::Color::BLACK
-          image[x * size + @width * size - 1, y * size + hy * size + iy] = ChunkyPNG::Color::BLACK
-        end
-      end
-    else
-
-
-      @height.times do |hy|
-        @width.times do |wx|
-          #draw background
-          size.times do |iy|
-            size.times do |ix|
-              image[x * size + hy * size + ix, y * size + wx * size + iy] = @colour
-            end
-          end
-
-          image[x * size + hy * size + size / 2, y * size + wx * size + size / 2] = ChunkyPNG::Color::BLACK
-        end
-      end
-
-      @height.times do |wx|
-        size.times do |ix|
-          image[x * size + wx * size + ix, y * size] = ChunkyPNG::Color::BLACK
-          image[x * size + wx * size + ix, y * size + @width * size - 1] = ChunkyPNG::Color::BLACK
-        end
-      end
-
-      @width.times do |hy|
-        size.times do |iy|
-          image[x * size, y * size + hy * size + iy] = ChunkyPNG::Color::BLACK
-          image[x * size + @height * size - 1, y * size + hy * size + iy] = ChunkyPNG::Color::BLACK
-        end
+    height.times do |hy|
+      SIZE.times do |iy|
+        image[x * SIZE, y * SIZE + hy * SIZE + iy] = ChunkyPNG::Color::BLACK
+        image[x * SIZE + width * SIZE - 1, y * SIZE + hy * SIZE + iy] = ChunkyPNG::Color::BLACK
       end
     end
   end
